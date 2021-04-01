@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "430077110172",
+    "firebase_url": "https://ipl-prediction-team-default-rtdb.firebaseio.com",
+    "project_id": "ipl-prediction-team",
+    "storage_bucket": "ipl-prediction-team.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430077110172:android:a9913dc6654793644f8a59",
+        "android_client_info": {
+          "package_name": "com.shivam.iplplay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430077110172-iiltqloh539u9m4nrvto71fv09c5k2no.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZJsIH2ogb-dWE4ncaltKY4IIl-qUdlNU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430077110172-iiltqloh539u9m4nrvto71fv09c5k2no.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "430077110172-09bcbn5vrl1986gt7fktsfju7qvop7rd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.shivam.iplprediction"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,6 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
+import 'landing_page.dart';
+
+bool success = false;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -18,7 +22,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: MyHomePage(title: 'Flutter Auth Demo'),
+      home: MyHomePage(),
+      //MyHomePage(title: 'Flutter Auth Demo'),
     );
   }
 }
@@ -30,7 +35,6 @@ class MyHomePage extends StatefulWidget {
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
-
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -44,17 +48,19 @@ class _MyHomePageState extends State<MyHomePage> {
   void verifyPhoneNumber() async {
     PhoneVerificationCompleted verificationCompleted =
         (PhoneAuthCredential phoneAuthCredential) async {
-          setState(() {
-            _smsController.text=phoneAuthCredential.smsCode;
-          });
-          Dialogs.showLoadingDialog(_scaffoldKey.currentContext, _scaffoldKey);
+      setState(() {
+        _smsController.text = phoneAuthCredential.smsCode;
+      });
+      Dialogs.showLoadingDialog(_scaffoldKey.currentContext, _scaffoldKey);
 
       await _auth.signInWithCredential(phoneAuthCredential);
-      showSnackbar("Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
+      showSnackbar(
+          "Phone number automatically verified and user signed in: ${_auth.currentUser.uid}");
     };
     PhoneVerificationFailed verificationFailed =
         (FirebaseAuthException authException) {
-      showSnackbar('Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
+      showSnackbar(
+          'Phone number verification failed. Code: ${authException.code}. Message: ${authException.message}');
     };
     PhoneCodeSent codeSent =
         (String verificationId, [int forceResendingToken]) async {
@@ -78,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
       showSnackbar("Failed to Verify Phone Number: ${e}");
     }
   }
+
   void showSnackbar(String message) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
   }
@@ -92,15 +99,17 @@ class _MyHomePageState extends State<MyHomePage> {
       final User user = (await _auth.signInWithCredential(credential)).user;
 
       showSnackbar("Successfully signed in UID: ${user.uid}");
+      success = true;
     } catch (e) {
       showSnackbar("Failed to sign in: " + e.toString());
     }
   }
+
   @override
   void initState() {
     super.initState();
-   
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,8 +117,9 @@ class _MyHomePageState extends State<MyHomePage> {
           title: Text(widget.title),
         ),
         key: _scaffoldKey,
-        resizeToAvoidBottomPadding: false,
-        body: Padding(padding: const EdgeInsets.all(8),
+        //      resizeToAvoidBottomPadding: false,
+        body: Padding(
+          padding: const EdgeInsets.all(8),
           child: Padding(
               padding: EdgeInsets.all(16),
               child: Column(
@@ -117,17 +127,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: <Widget>[
                   TextFormField(
                     controller: _phoneNumberController,
-                    decoration: const InputDecoration(labelText: 'Phone number (+xx xxx-xxx-xxxx)'),
+                    decoration: const InputDecoration(
+                        labelText: 'Phone number (+xx xxx-xxx-xxxx)'),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     alignment: Alignment.center,
-                    child: RaisedButton(child: Text("Get current number"),
+                    child: RaisedButton(
+                        child: Text("Get current number"),
                         onPressed: () async => {
-                          _phoneNumberController.text = await _autoFill.hint
-                        },
+                              _phoneNumberController.text = await _autoFill.hint
+                            },
                         color: Colors.greenAccent[700]),
-                  ),Container(
+                  ),
+                  Container(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     alignment: Alignment.center,
                     child: RaisedButton(
@@ -137,9 +150,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         verifyPhoneNumber();
                       },
                     ),
-                  ),TextFormField(
+                  ),
+                  TextFormField(
                     controller: _smsController,
-                    decoration: const InputDecoration(labelText: 'Verification code'),
+                    decoration:
+                        const InputDecoration(labelText: 'Verification code'),
                   ),
                   Container(
                     padding: const EdgeInsets.only(top: 16.0),
@@ -148,17 +163,21 @@ class _MyHomePageState extends State<MyHomePage> {
                         color: Colors.greenAccent[200],
                         onPressed: () async {
                           signInWithPhoneNumber();
+                          if (success == true) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (_) => MyBottomBarDemo()),
+                            );
+                          }
                         },
                         child: Text("Sign in")),
                   ),
-
                 ],
-              )
-          ),
-        )
-    );
+              )),
+        ));
   }
 }
+
 class Dialogs {
   static Future<void> showLoadingDialog(
       BuildContext context, GlobalKey key) async {
@@ -175,8 +194,13 @@ class Dialogs {
                     Center(
                       child: Column(children: [
                         CircularProgressIndicator(),
-                        SizedBox(height: 10,),
-                        Text("Please Wait....",style: TextStyle(color: Colors.blueAccent),)
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "Please Wait....",
+                          style: TextStyle(color: Colors.blueAccent),
+                        )
                       ]),
                     )
                   ]));
